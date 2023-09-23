@@ -1,11 +1,17 @@
 import React from "react";
-import SmartroPayment from "./SmartroPayComponent";
+import { Route, Routes } from "react-router-dom";
+import Complete from "./Complete";
+import Home from "./Home";
+import Layout from "./Layout";
 
 function App() {
   return (
-    <div className="App">
-      <SmartroPayment />
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="complete" element={<Complete />} />
+      </Route>
+    </Routes>
   );
 }
 

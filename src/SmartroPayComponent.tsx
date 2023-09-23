@@ -43,7 +43,7 @@ async function encodeSHA256Base64(strPW: string) {
 }
 
 const SmartroPayment = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, setValue } = useForm();
   const Mid = "t_2304208m";
   const MerchantKey =
     "0/4GFsSd7ERVRGX9WHOzJ96GyeMTwvIaKSWUCKmN3fDklNRGw3CualCFoMPZaS99YiFGOuwtzTkrLo4bR4V+Ow==";
@@ -51,6 +51,7 @@ const SmartroPayment = () => {
   const Amt = "1004";
   const [encryptData, setEncryptData] = useState<string>("");
   const today = new Date().yyyyMMdd();
+  const ReturnUrl = "http://localhost:3000/complete";
 
   useEffect(() => {
     // 스마트로페이 초기화
@@ -77,7 +78,7 @@ const SmartroPayment = () => {
         Amt: Amt,
         Moid: "Moid_20210112145131",
         Mid: Mid,
-        ReturnUrl: "가맹점 ReturnUrl",
+        ReturnUrl: ReturnUrl,
         StopUrl: "가맹점 StopUrl", // Mobile 연동 시 필수
         BuyerName: "구매자명",
         BuyerTel: "01099991111",
@@ -89,11 +90,16 @@ const SmartroPayment = () => {
         EncryptData: encryptData,
 
         Callback: function (res: any) {
-          handleSubmit((data) => {
-            data.Tid = res.Tid;
-            data.TrAuthKey = res.TrAuthKey;
-            // TODO: Implement further approval logic here if needed.
-          })();
+          // react-hook-form의 setValue를 사용하여 폼 값 설정
+          setValue("Tid", res.Tid);
+          setValue("TrAuthKey", res.TrAuthKey);
+
+          // 폼 제출
+          const approvalForm = document.getElementById(
+            "approvalForm"
+          ) as HTMLFormElement;
+          approvalForm.action = ReturnUrl;
+          approvalForm.submit();
         },
       });
     }
@@ -113,7 +119,12 @@ const SmartroPayment = () => {
         </tbody>
       </table>
 
-      <form id="approvalForm" name="approvalForm" method="post">
+      <form
+        id="approvalForm"
+        name="approvalForm"
+        method="post"
+        action={ReturnUrl}
+      >
         <input type="hidden" {...register("Tid")} />
         <input type="hidden" {...register("TrAuthKey")} />
       </form>
