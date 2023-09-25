@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Helmet>
-      <script src="https://tpay.smartropay.co.kr/asset/js/SmartroPAY-1.0.min.js?version=20230923" />
+      <script src="https://tpay.smartropay.co.kr/asset/js/SmartroPAY-1.0.min.js?version=20230924" />
     </Helmet>
     <BrowserRouter>
       <App />

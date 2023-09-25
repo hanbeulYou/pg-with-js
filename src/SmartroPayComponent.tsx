@@ -44,11 +44,13 @@ async function encodeSHA256Base64(strPW: string) {
 
 const SmartroPayment = () => {
   const { register, setValue } = useForm();
+  // const Mid = process.env.REACT_APP_MID;
+  // const MerchantKey = process.env.REACT_APP_MERCHANT_KEY;
   const Mid = "t_2304208m";
   const MerchantKey =
     "0/4GFsSd7ERVRGX9WHOzJ96GyeMTwvIaKSWUCKmN3fDklNRGw3CualCFoMPZaS99YiFGOuwtzTkrLo4bR4V+Ow==";
   const EdiDate = new Date().yyyyMMddHHmmss();
-  const Amt = "1004";
+  const Amt = "1000";
   const [encryptData, setEncryptData] = useState<string>("");
   const today = new Date().yyyyMMdd();
   const ReturnUrl = "http://localhost:3000/complete";
@@ -79,7 +81,7 @@ const SmartroPayment = () => {
         Moid: "Moid_20210112145131",
         Mid: Mid,
         ReturnUrl: ReturnUrl,
-        StopUrl: "가맹점 StopUrl", // Mobile 연동 시 필수
+        StopUrl: ReturnUrl, // Mobile 연동 시 필수
         BuyerName: "구매자명",
         BuyerTel: "01099991111",
         BuyerEmail: "noname@smartro.co.kr",
@@ -90,11 +92,9 @@ const SmartroPayment = () => {
         EncryptData: encryptData,
 
         Callback: function (res: any) {
-          // react-hook-form의 setValue를 사용하여 폼 값 설정
           setValue("Tid", res.Tid);
           setValue("TrAuthKey", res.TrAuthKey);
 
-          // 폼 제출
           const approvalForm = document.getElementById(
             "approvalForm"
           ) as HTMLFormElement;
