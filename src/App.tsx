@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Complete from "./Complete";
+import Complete from "./Smartro/SmartroComplete";
 import Home from "./Home";
 import Layout from "./Layout";
-import TossFail from "./TossFail";
-import TossSuccess from "./TossSuccess";
+import TossFail from "./TossPayments/TossFail";
+import TossSuccess from "./TossPayments/TossSuccess";
 
 function App() {
   return (
