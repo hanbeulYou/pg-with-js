@@ -24,12 +24,30 @@ const TossBillingSuccess = () => {
       customerKey: customerKey,
     };
 
+    const postAutoPayment = async (billingKey: string) => {
+      try {
+        const postAutoPaymentURL = `https://api.tosspayments.com/v1/billing/${billingKey}`;
+        const paymentData = {
+          customerKey: customerKey,
+          amount: 5000,
+          orderId: "",
+          orderName: "",
+        };
+        const res = await axios.post(postAutoPaymentURL, paymentData, {
+          headers,
+        });
+        console.log(res.data);
+      } catch (error) {
+        console.error("post Auto Payment Axios Error : ", error);
+      }
+    };
+
     const postBillingKey = async () => {
       try {
         const res = await axios.post(postURL, data, { headers });
-        console.log(res.data);
+        postAutoPayment(res.data.billingKey);
       } catch (error) {
-        console.error("post Payment Confirm Axios Error : ", error);
+        console.error("post Billing Key Axios Error : ", error);
       }
     };
 
