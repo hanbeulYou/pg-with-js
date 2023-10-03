@@ -1,11 +1,13 @@
-import React from "react";
-import SmartroPayment from "./Smartro/SmartroPayComponent";
-import TossPaymentsComponent from "./TossPayments/TossPaymentsComponent";
+import TossBiliingComponent from "./TossBilling/TossBillingComponent";
+// import SmartroPayment from "./Smartro/SmartroPayComponent";
+// import TossPaymentsComponent from "./TossPayments/TossPaymentsComponent";
 
 export default function Home() {
   return (
     <div>
-      <TossPaymentsComponent />
+      {/* <SmartroPayment/> */}
+      {/* <TossPaymentsComponent /> */}
+      <TossBiliingComponent />
     </div>
   );
 }
