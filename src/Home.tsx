@@ -1,4 +1,5 @@
-import TossBiliingComponent from "./TossBilling/TossBillingComponent";
+// import TossBiliingComponent from "./TossBilling/TossBillingComponent";
+import TossBillingWithApi from "./TossBillingWithAPI/TossBillingWithApi";
 // import SmartroPayment from "./Smartro/SmartroPayComponent";
 // import TossPaymentsComponent from "./TossPayments/TossPaymentsComponent";
 
@@ -7,7 +8,8 @@ export default function Home() {
     <div>
       {/* <SmartroPayment/> */}
       {/* <TossPaymentsComponent /> */}
-      <TossBiliingComponent />
+      {/* <TossBiliingComponent /> */}
+      <TossBillingWithApi />
     </div>
   );
 }
