@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import axios from "axios";
 import { useState } from "react";
-import { Resolver, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 type FormValues = {
   customerKey: string;
@@ -26,7 +26,6 @@ const Input = ({ label, register, required }: any) => (
 );
 
 export default function TossBillingWithApi() {
-  const clientKey = process.env.REACT_APP_TOSS_CK;
   const [paymentBtn, setPaymentBtn] = useState<boolean>(false);
   const [paymentData, setPaymentData] = useState<Payment>({
     customerKey: "",
@@ -71,7 +70,7 @@ export default function TossBillingWithApi() {
     setPaymentData({
       ...paymentData,
       amount: "5000",
-      orderId: uuid,
+      orderId: "hayou" + uuid,
       orderName: "테스트용 결제 품목",
     });
     const headers = {
