@@ -17,6 +17,8 @@ type Payment = {
   amount: string;
   orderId: string;
   orderName: string;
+  customerName: string;
+  customerEmail: string;
 };
 
 type CheckValidProps = {
@@ -32,7 +34,7 @@ const Input = ({ label, register, required }: any) => (
   </>
 );
 
-function checkCardNumberValid({
+function checkBINNumber({
   cardNumber,
   cardIssuer,
   setCardIssuer,
@@ -68,6 +70,26 @@ function checkCardNumberValid({
   return setCardIssuer(tmpCardIssuer);
 }
 
+function checkCardNumberValidation(cardNumber: string) {
+  const lastNumber = parseInt(cardNumber[cardNumber.length - 1]);
+  const reversedCardNumber = cardNumber
+    .slice(0, cardNumber.length - 1)
+    .split("")
+    .reverse()
+    .map((item, index) => {
+      const numberItem = parseInt(item);
+      if (index % 2 === 0) {
+        const returnValue =
+          numberItem * 2 > 9 ? numberItem * 2 - 9 : numberItem * 2;
+        return returnValue;
+      }
+      return numberItem;
+    });
+  const sumNumber = reversedCardNumber.reduce((acc, cur) => acc + cur, 0);
+  if ((sumNumber + lastNumber) % 10 === 0) return true;
+  return false;
+}
+
 export default function TossBillingWithApi() {
   const [paymentBtn, setPaymentBtn] = useState<boolean>(false);
   const [paymentData, setPaymentData] = useState<Payment>({
@@ -75,19 +97,24 @@ export default function TossBillingWithApi() {
     amount: "",
     orderId: "",
     orderName: "",
+    customerName: "한별",
+    customerEmail: "hanbeul.you@gmail.com",
   });
   const [billingKey, setBillingKey] = useState<string>("");
   const { register, handleSubmit, control } = useForm<FormValues>({});
   const secretKey = btoa(process.env.REACT_APP_TOSS_SK + ":");
   const watchedCardNumber = useWatch({ control, name: "cardNumber" });
   const [cardIssuer, setCardIssuer] = useState<string>("");
+  const [cardValidation, setCardValidation] = useState<boolean>(true);
 
   useEffect(() => {
-    checkCardNumberValid({
+    checkBINNumber({
       cardNumber: watchedCardNumber,
       cardIssuer,
       setCardIssuer,
     });
+    if (watchedCardNumber?.length === 16)
+      setCardValidation(checkCardNumberValidation(watchedCardNumber));
   }, [cardIssuer, watchedCardNumber]);
 
   const onSubmit = (values: FormValues) => {
@@ -98,7 +125,12 @@ export default function TossBillingWithApi() {
       "Content-Type": "application/json",
     };
     const uuid = self.crypto.randomUUID();
-    const data = { ...values, customerKey: uuid };
+    const data = {
+      ...values,
+      customerKey: uuid,
+      customerName: "한별",
+      customerEmail: "hanbeul.you@gmail.com",
+    };
 
     const postBillingKey = async () => {
       try {
@@ -123,8 +155,10 @@ export default function TossBillingWithApi() {
     setPaymentData({
       ...paymentData,
       amount: "5000",
-      orderId: "hayou" + uuid,
+      orderId: "hayou00" + uuid,
       orderName: "테스트용 결제 품목",
+      customerName: "한별",
+      customerEmail: "hanbeul.you@gmail.com",
     });
     const headers = {
       Authorization: `Basic ${secretKey}`,
@@ -167,6 +201,7 @@ export default function TossBillingWithApi() {
         <button type="submit">빌링 키 발급</button>
       </form>
       <p>카드 타입 : {cardIssuer}</p>
+      <p>카드 Validation : {cardValidation.toString()}</p>
       {paymentBtn && (
         <button onClick={handlePaymentBtn}>빌링 키 결제 요청</button>
       )}
